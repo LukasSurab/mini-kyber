@@ -38,7 +38,7 @@ def msgBitsToCoeffs(message):
     print(messageSplit)
     arrayOfCoefficients = [0,0,0,0,0,0,0,0]
     i = 0
-    for coe in range(8):
+    for coe in range(ExpMod):
         if coe in messageExp:
             arrayOfCoefficients[coe] = messageSplit[i]
             i += 1 
@@ -54,7 +54,7 @@ def PRF_small(startSeed = None,cbd = None):
         min = -2
         max = 2
     coeffs1 = [0,0,0,0,0,0,0,0]
-    for i in range(8):
+    for i in range(ExpMod):
         nextSeed = startSeed + str(i)
         hash = hashlib.sha256(nextSeed.encode('ascii')).digest()
         bigRand = int.from_bytes(hash, 'big')
@@ -70,7 +70,7 @@ def PRF(startSeed = None):
     min = 0
     max = 232
     coeffs1 = [0,0,0,0,0,0,0,0]
-    for i in range(8):
+    for i in range(ExpMod):
         nextSeed = startSeed + str(i)
         hash = hashlib.sha256(nextSeed.encode('ascii')).digest()
         bigRand = int.from_bytes(hash, 'big')
@@ -91,7 +91,7 @@ def generate_small_random_poly(seed=None):
     
     coeffs = PRF_small()
     
-    s = matrix([Rmodf(sum(coeffs[i]*x**i for i in range(8)))])
+    s = matrix([Rmodf(sum(coeffs[i]*x**i for i in range(ExpMod)))])
     
     return s
 
@@ -111,7 +111,7 @@ def generate_small_randoms(seed=None):
     coeffs1 = PRF_small()
     coeffs2 = PRF_small()
     
-    s = matrix([[Rmodf(sum(coeffs1[i]*x**i for i in range(8)))], [Rmodf(sum(coeffs2[i]*x**i for i in range(8)))]])
+    s = matrix([[Rmodf(sum(coeffs1[i]*x**i for i in range(ExpMod)))], [Rmodf(sum(coeffs2[i]*x**i for i in range(ExpMod)))]])
     
     return s
 
@@ -141,8 +141,8 @@ def generate_random_matrix22(seed = None,):
     coeffs3 = PRF()
     coeffs4 = PRF()
     
-    A = matrix([[Rmodf(sum(coeffs1[i]*x**i for i in range(8))),Rmodf(sum(coeffs2[i]*x**i for i in range(8)))], 
-                [Rmodf(sum(coeffs3[i]*x**i for i in range(8))),Rmodf(sum(coeffs4[i]*x**i for i in range(8)))]])
+    A = matrix([[Rmodf(sum(coeffs1[i]*x**i for i in range(ExpMod))),Rmodf(sum(coeffs2[i]*x**i for i in range(ExpMod)))], 
+                [Rmodf(sum(coeffs3[i]*x**i for i in range(ExpMod))),Rmodf(sum(coeffs4[i]*x**i for i in range(ExpMod)))]])
     print(A)
     return A
 
