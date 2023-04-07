@@ -3,7 +3,28 @@ from sage.all import *
 from random import seed as set_random_seed
 import json
 
+polyMod = 233
+ExpMod = 8
 
+def coeffsToMsg(decodedCoeffs):
+    x = 0
+    cnt = 0
+    for coeffici in decodedCoeffs:
+        if(coeffici == 1):
+            x += 2**cnt
+        cnt += 1
+    output['msg'] = chr(x)
+    return output
+
+def decode(coeffsMsg):
+    coefficients = []
+    for coeffic in coeffsMsg:
+        if math.isclose(ceil(polyMod/2),coeffic,abs_tol=ceil(polyMod/2)/2):
+            coeffic = ceil(polyMod/2)
+        else:
+            coeffic = 0
+        coefficients.append(coeffic)
+    return coefficients
 
 def msgBitsToCoeffs(message):
     
@@ -24,7 +45,7 @@ def msgBitsToCoeffs(message):
     return arrayOfCoefficients
 
 def PRF_small(startSeed = None,cbd = None):
-    F = FiniteField(233)
+    F = FiniteField(polyMod)
     if startSeed is None:
         startSeed = str(time.time()) + '|'
     min = -1
@@ -43,7 +64,7 @@ def PRF_small(startSeed = None,cbd = None):
 
 
 def PRF(startSeed = None):
-    F = FiniteField(233)
+    F = FiniteField(polyMod)
     if startSeed is None:
         startSeed = str(time.time()) + '|'
     min = 0
@@ -61,10 +82,11 @@ def generate_small_random_poly(seed=None):
     if seed is not None:
         set_random_seed(seed)
 
-    F = FiniteField(233)
+    #TODO setting 
+    F = FiniteField(polyMod)
     R = PolynomialRing(F, 'x')
     x = R.gen()
-    f = x**8 + 1
+    f = x**ExpMod + 1
     Rmodf = R.quotient(f)
     
     coeffs = PRF_small()
@@ -80,10 +102,10 @@ def generate_small_randoms(seed=None):
     if seed is not None:
         set_random_seed(seed)
 
-    F = FiniteField(233)
+    F = FiniteField(polyMod)
     R = PolynomialRing(F, 'x')
     x = R.gen()
-    f = x**8 + 1
+    f = x**ExpMod + 1
     Rmodf = R.quotient(f)
 
     coeffs1 = PRF_small()
@@ -108,10 +130,10 @@ def generate_random_matrix22(seed = None,):
     if seed is not None:
         set_random_seed(seed)
 
-    F = FiniteField(233)
+    F = FiniteField(polyMod)
     R = PolynomialRing(F, 'x')
     x = R.gen()
-    f = x**8 + 1
+    f = x**ExpMod + 1
     Rmodf = R.quotient(f)
 
     coeffs1 = PRF()
@@ -119,7 +141,8 @@ def generate_random_matrix22(seed = None,):
     coeffs3 = PRF()
     coeffs4 = PRF()
     
-    A = matrix([[Rmodf(sum(coeffs1[i]*x**i for i in range(8))),Rmodf(sum(coeffs2[i]*x**i for i in range(8)))], [Rmodf(sum(coeffs3[i]*x**i for i in range(8))),Rmodf(sum(coeffs4[i]*x**i for i in range(8)))]])
+    A = matrix([[Rmodf(sum(coeffs1[i]*x**i for i in range(8))),Rmodf(sum(coeffs2[i]*x**i for i in range(8)))], 
+                [Rmodf(sum(coeffs3[i]*x**i for i in range(8))),Rmodf(sum(coeffs4[i]*x**i for i in range(8)))]])
     print(A)
     return A
 
@@ -171,10 +194,10 @@ print("A2 =\n{}\nt2 =\n{}\n".format(A2, t2))
 
 class SecretKey:
     def __init__(self, seed=None):
-        self.F = FiniteField(233)
+        self.F = FiniteField(polyMod)
         self.R = PolynomialRing(self.F, 'x')
         self.x = self.R.gen()
-        self.f = self.x**8 + 1
+        self.f = self.x**ExpMod + 1
         self.Rmodf = self.R.quotient(self.f)
         self.seed = seed
 
@@ -187,10 +210,10 @@ class SecretKey:
     
 class PublicKey:
     def __init__(self, seed=None):
-        self.F = FiniteField(233)
+        self.F = FiniteField(polyMod)
         self.R = PolynomialRing(self.F, 'x')
         self.x = self.R.gen()
-        self.f = self.x**8 + 1
+        self.f = self.x**ExpMod + 1
         self.Rmodf = self.R.quotient(self.f)
         self.seed = seed
         self.a = None
@@ -206,10 +229,10 @@ class PublicKey:
         self.generate_key(self.seed)
 
 def list_to_poly(coefList):
-    F = FiniteField(233)
+    F = FiniteField(polyMod)
     R = PolynomialRing(F, 'x') 
     x = R.gen()
-    f = x**8 + 1
+    f = x**ExpMod + 1
     Rmodf = R.quotient(f)
     Coefficients = []
     for coeffic in coefList:
@@ -219,10 +242,10 @@ def list_to_poly(coefList):
     return messagePoly
 
 def list_to_poly_matrix(coefList):
-    F = FiniteField(233)
+    F = FiniteField(polyMod)
     R = PolynomialRing(F, 'x') 
     x = R.gen()
-    f = x**8 + 1
+    f = x**ExpMod + 1
     Rmodf = R.quotient(f)
     Coefficients = []
     for coeffic in coefList[0]:
@@ -240,10 +263,10 @@ def poly_message(message):
     print(message)
     if isinstance(message,str):
         message = ord(message)
-    F = FiniteField(233)
+    F = FiniteField(polyMod)
     R = PolynomialRing(F, 'x') 
     x = R.gen()
-    f = x**8 + 1
+    f = x**ExpMod + 1
     Rmodf = R.quotient(f)
     binary_string = bin(message)[2:]   
     binary_array = [int(bit) for bit in binary_string]   # convert string to array of integers
@@ -252,7 +275,7 @@ def poly_message(message):
     print(len(binary_array))
     messagePoly = [Rmodf(sum(binary_array[i]*x**(len(binary_array)-1-i) for i in range(len(binary_array))))]
     print(messagePoly)
-    numberF = ceil(233/2)
+    numberF = ceil(polyMod/2)
     print(numberF)
     decompressedPoly = decompress(binary_array,numberF)
     m = matrix([Rmodf(sum(decompressedPoly[i]*x**(len(binary_array)-1-i) for i in range(len(binary_array))))])
@@ -262,8 +285,6 @@ def poly_message(message):
     return m
 
 m = poly_message("Z")
-
-#TODO dat do funkcie
 
 sk1 = SecretKey(seed=42)
 s1 = sk1.generate_key()
@@ -345,26 +366,14 @@ print(v)
 def decrypt(uEnc,vEnc,sKey,output=dict()):
     
     m_n = vEnc - sKey.transpose() * uEnc
+    m_nSplit = msgBitsToCoeffs(m_n)
+    coefficients = decode(m_nSplit)
+    m_nSplitDsc = compress(coefficients,ceil(polyMod/2))
+    output = coeffsToMsg(m_nSplitDsc)
     print("m_n =")
     print(m_n)
-    m_nSplit = msgBitsToCoeffs(m_n)
-    Coefficients = []
-    for coeffic in m_nSplit:
-        if math.isclose(ceil(233/2),coeffic,abs_tol=ceil(233/2)/2):
-            coeffic = ceil(233/2)
-        else:
-            coeffic = 0
-        Coefficients.append(coeffic)
-    print(Coefficients)
-    m_nSplitDsc = compress(Coefficients,ceil(233/2))
+    print(coefficients)
     print(m_nSplitDsc)
-    x = 0
-    cnt = 0
-    for coeffici in m_nSplitDsc:
-        if(coeffici == 1):
-            x += 2**cnt
-        cnt += 1
-    output['msg'] = chr(x)
     return output
 
 decryptedMsg = decrypt(utest1,vtest1,s1)
