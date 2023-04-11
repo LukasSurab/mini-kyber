@@ -2,7 +2,7 @@ import hashlib, time
 from sage.all import *
 import json
 
-polyMod = 137
+qPolyMod = 137
 ExpMod = 8
 
 def coeffsToMsg(decodedCoeffs):
@@ -18,8 +18,8 @@ def coeffsToMsg(decodedCoeffs):
 def decode(coeffsMsg):
     coefficients = []
     for coeffic in coeffsMsg:
-        if math.isclose(ceil(polyMod/2),coeffic,abs_tol=ceil(polyMod/2)/2):
-            coeffic = ceil(polyMod/2)
+        if math.isclose(ceil(qPolyMod/2),coeffic,abs_tol=ceil(qPolyMod/2)/2):
+            coeffic = ceil(qPolyMod/2)
         else:
             coeffic = 0
         coefficients.append(coeffic)
@@ -73,7 +73,7 @@ def msgBitsToCoeffs(message):
     return arrayOfCoefficients
 
 def PRF_small(startSeed = None,cbd = None):
-    F = FiniteField(polyMod)
+    F = FiniteField(qPolyMod)
     if startSeed is None:
         startSeed = str(time.time()) + '|'
     min = -1
@@ -92,7 +92,7 @@ def PRF_small(startSeed = None,cbd = None):
 
 
 def PRF(startSeed = None):
-    F = FiniteField(polyMod)
+    F = FiniteField(qPolyMod)
     if startSeed is None:
         startSeed = str(time.time()) + '|'
     min = 0
@@ -110,7 +110,7 @@ def generate_small_random_poly(startSeed=None,cbd = None):
     if startSeed is None:
         startSeed = str(time.time()) + '|'
 
-    F = FiniteField(polyMod)
+    F = FiniteField(qPolyMod)
     R = PolynomialRing(F, 'x')
     x = R.gen()
     f = x**ExpMod + 1
@@ -127,7 +127,7 @@ def generate_small_random_poly(startSeed=None,cbd = None):
 
 def generate_small_randoms(startSeed=None,cbd = None):
 
-    F = FiniteField(polyMod)
+    F = FiniteField(qPolyMod)
     R = PolynomialRing(F, 'x')
     x = R.gen()
     f = x**ExpMod + 1
@@ -158,7 +158,7 @@ def compress(arr, q):
 
 def generate_random_matrix22(startSeed = None):
 
-    F = FiniteField(polyMod)
+    F = FiniteField(qPolyMod)
     R = PolynomialRing(F, 'x')
     x = R.gen()
     f = x**ExpMod + 1
@@ -198,7 +198,7 @@ def keyGen(startSeed=None):
     return publicKey,secretKey   
 
 def list_to_poly(coefList):
-    F = FiniteField(polyMod)
+    F = FiniteField(qPolyMod)
     R = PolynomialRing(F, 'x') 
     x = R.gen()
     f = x**ExpMod + 1
@@ -211,7 +211,7 @@ def list_to_poly(coefList):
     return messagePoly
 
 def list_to_poly_matrix(coefList):
-    F = FiniteField(polyMod)
+    F = FiniteField(qPolyMod)
     R = PolynomialRing(F, 'x') 
     x = R.gen()
     f = x**ExpMod + 1
@@ -232,7 +232,7 @@ def poly_message(message):
     print(message)
     if isinstance(message,str):
         message = ord(message)
-    F = FiniteField(polyMod)
+    F = FiniteField(qPolyMod)
     R = PolynomialRing(F, 'x') 
     x = R.gen()
     f = x**ExpMod + 1
@@ -244,7 +244,7 @@ def poly_message(message):
     print(len(binary_array))
     messagePoly = [Rmodf(sum(binary_array[i]*x**(len(binary_array)-1-i) for i in range(len(binary_array))))]
     print(messagePoly)
-    numberF = ceil(polyMod/2)
+    numberF = ceil(qPolyMod/2)
     print(numberF)
     decompressedPoly = decompress(binary_array,numberF)
     m = matrix([Rmodf(sum(decompressedPoly[i]*x**(len(binary_array)-1-i) for i in range(len(binary_array))))])
@@ -291,7 +291,7 @@ def decrypt(uEnc,vEnc,sKey,output=dict()):
     m_n = vEnc - sKey.transpose() * uEnc
     m_nSplit = msgBitsToCoeffs(m_n)
     coefficients = decode(m_nSplit)
-    m_nSplitDsc = compress(coefficients,ceil(polyMod/2))
+    m_nSplitDsc = compress(coefficients,ceil(qPolyMod/2))
     output = coeffsToMsg(m_nSplitDsc)
     print("m_n =")
     print(m_n)
