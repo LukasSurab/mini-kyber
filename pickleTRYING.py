@@ -1,6 +1,7 @@
 import hashlib, time
 from sage.all import *
 import json
+import pickle
 
 qPolyMod = 137
 ExpMod = 8
@@ -145,6 +146,25 @@ def generate_small_randoms(startSeed=None,cbd = None):
     
     return s
 
+def generate_secret_key(startSeed=None,output=dict()):
+    
+    if startSeed is not None:
+        secretKey = generate_small_randoms(startSeed)
+    else:
+        secretKey = generate_small_randoms()
+    output['s'] = secretKey
+    pickleString = pickle.dumps(output)
+    with open("keyGenSecretData.pickle","wb") as f:
+        f.write(pickleString)
+    return secretKey
+
+def generate_keyGen_error(startSeed=None):
+    
+    if startSeed is not None:
+        keyGenError = generate_small_randoms(startSeed + 150)
+    else:
+        keyGenError = generate_small_randoms()
+    return keyGenError
 
 def decompress(arr, q):
 
@@ -181,13 +201,20 @@ def generate_random_matrix22(startSeed = None):
     return A
 
 
-def generate_public_key(s,startSeed = None):
+def generate_public_key(s,e,startSeed = None,output=dict()):
     
     A = generate_random_matrix22(startSeed)
-    e = generate_small_randoms(startSeed)
+    #e = generate_small_randoms(startSeed)
     
     t = A * s + e
-    
+    output['A'] = A
+    output['t'] = t
+    output['e'] = e
+    outputA = matrixXbartoX(A) 
+    print(type(outputA[0][0]))
+    pickleString = pickle.dumps(output)
+    with open("keyGenData.pickle","wb") as f:
+        f.write(pickleString)
     return A, t
 
 def keyGen(startSeed=None):
@@ -257,7 +284,7 @@ def poly_message(message):
 #TODO dat do funkcie enc
 
 
-def encrypt(AMatrixpk1,tpk2,message,r,seed = None, output=dict()):
+def encrypt(AMatrixpk1,tpk2,message,r,seed = None, outputU=dict(),outputV=dict(),outputDec=dict()):
 
 
     e1 = generate_small_randoms(seed,2)
@@ -281,53 +308,51 @@ def encrypt(AMatrixpk1,tpk2,message,r,seed = None, output=dict()):
     v = t_t * r + e2 + message
     print("v =")
     print(v)
-    output['v'] = v
-    output['u'] = u
-    return output, u, v
+    outputV['v'] = v
+    outputU['u'] = u
+    outputU['r'] = r
+    outputV['r'] = r
+    outputU['e1'] = e1
+    outputU['v'] = v
+    outputV['e2'] = e2
+    outputU['A'] = A_t
+    outputV['t'] = t_t
+    outputU['m'] = message
+    outputV['m'] = message
+    outputDec['u'] = u
+    outputDec['v'] = v
+    pickleStringU = pickle.dumps(outputU)
+    pickleStringV = pickle.dumps(outputV)
+    pickleStringCip = pickle.dumps(outputDec)
+    with open("encryptionUData.pickle","wb") as f:
+        f.write(pickleStringU)
+    with open("encryptionVData.pickle","wb") as f1:
+        f1.write(pickleStringV)
+    with open("CipherTextData.pickle","wb") as f2:
+        f2.write(pickleStringCip)
+    return u, v, e1, e2
 
 
-def decrypt(uEnc,vEnc,sKey,output=dict()):
+def decrypt(uEnc,vEnc,sKey,output=dict(),outputSteps=dict()):
     
     m_n = vEnc - sKey.transpose() * uEnc
     m_nSplit = msgBitsToCoeffs(m_n)
     coefficients = decode(m_nSplit)
     m_nSplitDsc = compress(coefficients,ceil(qPolyMod/2))
     output = coeffsToMsg(m_nSplitDsc)
+    outputSteps['m_n'] = m_n
+    outputSteps['m_nSplit'] = m_nSplit
+    outputSteps['coefficients'] = coefficients
+    outputSteps['m_nSplitDsc'] = m_nSplitDsc
+    outputSteps['result'] = coeffsToMsg(m_nSplitDsc)
     print("m_n =")
     print(m_n)
     print(coefficients)
     print(m_nSplitDsc)
+    result = pickle.dumps(outputSteps)
+    with open("result.pickle","wb") as f:
+        f.write(result)
     return output
-
-
-output = dict()
-output['message'] = list()
-
-
-m = poly_message("Z")
-
-
-s1 = generate_small_randoms()
-
-s2 = generate_small_randoms()
-
-a,t = generate_public_key(s1)
-
-
-
-aX = matrixXbartoX(a)
-print(aX)
-print(aX[0])
-print(aX[1])
-
-print(s1)
-print(s2)
-print("a =")
-print(a)
-print(str(a))
-print(t)
-r = generate_small_randoms()
-charOutput, utest1, vtest1 = encrypt(a,t,m,r)
 
 def enryptedOutputToJSON(charOutput):
     m_nSplitV = msgBitsToCoeffs(charOutput['v'])
@@ -354,11 +379,40 @@ def JSONtoPolyEncryption(jsonOutput):
     print(v)
     return u,v
 
+output = dict()
+output['message'] = list()
 
-output = enryptedOutputToJSON(charOutput)
-u,v = JSONtoPolyEncryption(output)
+"""
+m = poly_message("Z")
 
-decryptedMsg = decrypt(u,v,s1)
+e = generate_keyGen_error()
+
+s1 = generate_secret_key()
+
+s2 = generate_small_randoms()
+
+a,t = generate_public_key(s1,e)
+
+
+
+aX = matrixXbartoX(a)
+print(aX)
+print(aX[0])
+print(aX[1])
+
+print(s1)
+print(s2)
+print("a =")
+print(a)
+print(str(a))
+print(t)
+r = generate_small_randoms()
+utest1, vtest1, e1, e2 = encrypt(a,t,m,r)
+
+#output = enryptedOutputToJSON(charOutput)
+#u,v = JSONtoPolyEncryption(output)
+
+decryptedMsg = decrypt(utest1,vtest1,s1)
 
 jsonString1 = json.dumps(decryptedMsg)
 with open("dataDec.json","w") as file:
@@ -367,12 +421,14 @@ with open("dataDec.json","w") as file:
 print(decryptedMsg['msg'])
 
 resultArray = []
-
+"""
+"""
 for j in range(1000):
     newMessage = poly_message("Z")
-    s1 = generate_small_randoms()
+    e = generate_keyGen_error()
+    s1 = generate_secret_key()
     r = generate_small_randoms()
-    a,t = generate_public_key(s1)
+    a,t = generate_public_key(s1,e)
     charOutput, utest1, vtest1 = encrypt(a,t,m,r)
 
     output = enryptedOutputToJSON(charOutput)
@@ -382,3 +438,4 @@ for j in range(1000):
 
 
 print(resultArray.count('Z'))
+"""
