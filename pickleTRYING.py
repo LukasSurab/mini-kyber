@@ -146,13 +146,15 @@ def generate_small_randoms(startSeed=None,cbd = None):
     
     return s
 
-def generate_secret_key(startSeed=None,output=dict()):
+def generate_secret_key(startSeed=None,output=dict(),outputTranspose=dict()):
     
     if startSeed is not None:
         secretKey = generate_small_randoms(startSeed)
     else:
         secretKey = generate_small_randoms()
     output['s'] = secretKey
+    s_T = secretKey.transpose()
+    output['s_T'] = s_T
     pickleString = pickle.dumps(output)
     with open("keyGenSecretData.pickle","wb") as f:
         f.write(pickleString)
