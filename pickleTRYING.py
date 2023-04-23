@@ -6,7 +6,7 @@ import pickle
 qPolyMod = 137
 ExpMod = 8
 
-def coeffsToMsg(decodedCoeffs):
+def coeffsToMsg(decodedCoeffs,output = dict()):
     x = 0
     cnt = 0
     for coeffici in decodedCoeffs:
@@ -356,7 +356,7 @@ def decrypt(uEnc,vEnc,sKey,output=dict(),outputSteps=dict()):
         f.write(result)
     return output
 
-def enryptedOutputToJSON(charOutput):
+def enryptedOutputToJSON(charOutput,output = dict()):
     m_nSplitV = msgBitsToCoeffs(charOutput['v'])
     charOutput['v'] = [int(c) for c in m_nSplitV]
 
@@ -380,64 +380,22 @@ def JSONtoPolyEncryption(jsonOutput):
     v = list_to_poly(v)
     print(v)
     return u,v
-
+"""
+TEST
 output = dict()
 output['message'] = list()
 
-"""
-m = poly_message("Z")
-
-e = generate_keyGen_error()
-
-s1 = generate_secret_key()
-
-s2 = generate_small_randoms()
-
-a,t = generate_public_key(s1,e)
-
-
-
-aX = matrixXbartoX(a)
-print(aX)
-print(aX[0])
-print(aX[1])
-
-print(s1)
-print(s2)
-print("a =")
-print(a)
-print(str(a))
-print(t)
-r = generate_small_randoms()
-utest1, vtest1, e1, e2 = encrypt(a,t,m,r)
-
-#output = enryptedOutputToJSON(charOutput)
-#u,v = JSONtoPolyEncryption(output)
-
-decryptedMsg = decrypt(utest1,vtest1,s1)
-
-jsonString1 = json.dumps(decryptedMsg)
-with open("dataDec.json","w") as file:
-    file.write(jsonString1)
-
-print(decryptedMsg['msg'])
-
 resultArray = []
-"""
-"""
 for j in range(1000):
-    newMessage = poly_message("Z")
+    message = 'M'
     e = generate_keyGen_error()
     s1 = generate_secret_key()
-    r = generate_small_randoms()
     a,t = generate_public_key(s1,e)
-    charOutput, utest1, vtest1 = encrypt(a,t,m,r)
-
-    output = enryptedOutputToJSON(charOutput)
-    u,v = JSONtoPolyEncryption(output)
+    r = generate_small_randoms()
+    u,v,e1,e2 = encrypt(a,t,poly_message(message),r,)
     decryptedMsg = decrypt(u,v,s1)
     resultArray.append(decryptedMsg['msg'])
 
 
-print(resultArray.count('Z'))
+print(resultArray.count('M'))
 """

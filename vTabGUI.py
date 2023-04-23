@@ -91,6 +91,7 @@ class FrameVTab:
         ToolTip(self.vButton,msg=str(self.v))
         self.vButton.place(x = 145,y = 94,width=48, height=48)
         self.vButton['font'] = self.myFont
+        self.loadButtonv['state'] = 'disabled'
         
 
     def load_t_detailed_v(self):
@@ -112,6 +113,7 @@ class FrameVTab:
         ToolTip(self.eButtonHover,msg=str(self.eV))
         self.eButtonHover.place(x = 710,y = 246,width=48, height=175)
         self.eButtonHover['font'] = self.myFont
+        self.loadButtonAE['state'] = 'disabled'
 
 
     def load_button_skV(self):
@@ -128,8 +130,12 @@ class FrameVTab:
         ToolTip(self.sButton2,msg=str(self.s))
         self.sButton2.place(x = 625,y = 245,width=48, height=175)
         self.sButton2['font'] = self.myFont
+        self.loadButtonsk['state'] = 'disabled'
 
     def reset_button(self):
+        self.loadButtonAE['state'] = 'enabled'
+        self.loadButtonv['state'] = 'enabled'
+        self.loadButtonsk['state'] = 'enabled'
         if self.vButton is not None:
             self.vButton.destroy()
             self.rButtonHover.destroy()

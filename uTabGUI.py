@@ -79,6 +79,7 @@ class FrameUTab:
         ToolTip(self.mButtonHover,msg=str(self.mU))
         self.mButtonHover.place(x = 974,y = 407,width=48, height=48)
         self.mButtonHover['font'] = self.myFont
+        self.loadButton['state'] = 'disabled'
 
     def load_button_skU(self):
         with open("keyGenSecretDataTransposed.pickle", "rb") as s_in:
@@ -98,8 +99,11 @@ class FrameUTab:
         ToolTip(self.sButton2,msg=str(self.s))
         self.sButton2.place(x = 222,y = 132,width=48, height=173)
         self.sButton2['font'] = self.myFont
+        self.loadButtonSK['state'] = 'disabled'
 
     def reset_button(self):
+        self.loadButton['state'] = 'enabled'
+        self.loadButtonSK['state'] = 'enabled'
         if self.sButton is not None:
             self.sButton.destroy()
             self.sButton1.destroy()

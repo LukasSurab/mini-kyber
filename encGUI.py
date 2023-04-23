@@ -8,7 +8,6 @@ import tkinter.font as font
 
 class EncryptionTab:
     def __init__(self, notebook):
-        self.sada = False
         self.frame = ttk.Frame(notebook)
         self.myFont = font.Font(size=20)
 
@@ -36,9 +35,9 @@ class EncryptionTab:
         self.encSeedRandomizerEntry = ttk.Entry(self.frame)
         self.encGenerateRButton = ttk.Button(self.frame,text = "Generate randomizer r",command = self.button_generateRandomizer)
         self.seedEncLabel = ttk.Label(self.frame, text = 'seed for encryption')
-        self.seedEncEntry = ttk.Entry(self.frame)
+        self.seedEncEntry = ttk.Entry(self.frame,state='disabled')
         self.messageLabel = ttk.Label(self.frame, text = 'Message to encrypt')
-        self.messageToEncEntry = ttk.Entry(self.frame)
+        self.messageToEncEntry = ttk.Entry(self.frame,state='disabled')
         self.encButton = ttk.Button(self.frame,text = "Encrypt",command = self.button_Encrypt,state= 'disabled')
         self.resetButton = ttk.Button(self.frame,text = "reset",command = self.button_reset)
 
@@ -56,36 +55,34 @@ class EncryptionTab:
         self.label2.place(x=450,y = 0)
         self.label1.place(x = 10, y = 345)
         self.resetButton.place(x = 1000,y= 600)
-    """
-    def button_infoButtonChangePics(self):
-        print('a button was pressed')
-        if self.sada is True:
-            self.test1 = ImageTk.PhotoImage(file='encccS.png')
-            self.label1.place(x = 10, y = 345)
-            self.label1['image'] = self.test1
-            #self.label1.image = self.test1
 
-            self.test2 = ImageTk.PhotoImage(file='encryptionFlow.png')
-            self.label2.place(x=400,y = 0)
-            self.label2['image'] = self.test2
-            #self.label2.image = self.test2
+        self.r = None
 
-            self.sada = False
-        else:
-            self.test1 = ImageTk.PhotoImage(file='uuuuu.png')
-            self.label1.place(x=10,y = 400)
-            self.label1['image'] = self.test1
-            #self.label1.image = self.test1
-
-            self.test2 = ImageTk.PhotoImage(file='vvvvv1.png')
-            self.label2.place(x=450,y = -50)
-            self.label2['image'] = self.test2
-            #self.label2.image = self.test2
-
-            self.sada = True
-    """
+        self.PKButton1 = None
+        self.randomizerButton = None
+        self.uButton = None
+   
     def button_reset(self):
-        print('a button was pressed')
+        self.r = None
+
+        self.encGenerateRButton['state'] = 'enabled'
+        self.loadPKButton['state'] = 'disabled'
+        self.encButton['state'] = 'disabled'
+        self.encSeedRandomizerEntry['state'] = 'enabled'
+        self.seedEncEntry['state'] = 'disabled'
+        self.messageToEncEntry['state'] = 'disabled'
+        if self.PKButton1 is not None:
+            self.PKButton1.destroy()
+            self.tButton1.destroy()
+        if self.randomizerButton is not None:
+            self.randomizerButton.destroy()
+        if self.uButton is not None:
+            self.uButton.destroy()
+            self.vButton.destroy()
+            self.messageButton.destroy()
+            self.error1Button.destroy()
+            self.error2Button.destroy()
+
 
 
     def button_LoadPublicKey(self):
@@ -111,6 +108,8 @@ class EncryptionTab:
         ToolTip(self.tButton1, msg = "t: " + str(self.t1))
         self.loadPKButton['state'] = 'disabled'
         self.encButton['state'] = 'enabled'
+        self.seedEncEntry['state'] = 'enabled'
+        self.messageToEncEntry['state'] = 'enabled'
 
     def button_generateRandomizer(self,seed = None):
         if self.encSeedRandomizerEntry.get() != '':

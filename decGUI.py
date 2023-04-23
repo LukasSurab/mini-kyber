@@ -17,6 +17,13 @@ class DecryptionTab:
         self.u = None
         self.v = None
 
+        self.m_nLabel = None
+
+        self.messageButtonS = None
+        self.messageButtonM = None
+        self.uButtonHover = None
+
+
         self.image1 = Image.open("decc.png")
         self.test = ImageTk.PhotoImage(self.image1)
         self.label1 = ttk.Label(self.frame,image=self.test)
@@ -41,8 +48,6 @@ class DecryptionTab:
                 +"Výsledkom bude správa m s pozdvihnutými koeficientami.\n"
                 +"Nakoniec použije funkciu copmress, ktorá nám vráti správu do jej bitovej hodnoty, z ktorej získame výslednú dešifrovanú správu.")
 
-        self.StepsDecodeDecryptedButton = ttk.Button(self.frame,text = "Decode steps",state='disabled',command = self.button_decryptSteps)
-
         self.loadCipherTextButton.place(x = 0,y = 30)
         self.loadSecretKeyButton.place(x = 0, y = 150)
         self.decButton.place(x = 0, y = 270)
@@ -50,7 +55,6 @@ class DecryptionTab:
         self.label1.place(x = 10, y = 400)
         self.label2.place(x=600,y = 0)
         self.resetButton.place(x = 1000,y= 600)
-        self.StepsDecodeDecryptedButton.place(x = 250, y = 150)
 
     def button_LoadCipherText(self):
         with open("CipherTextData.pickle", "rb") as uv_in:
@@ -67,6 +71,8 @@ class DecryptionTab:
         ToolTip(self.vButtonHover,msg=str(self.v))
         self.vButtonHover.place(x = 64,y = 526,width=48, height=48)
         self.vButtonHover['font'] = self.myFont
+        self.loadCipherTextButton['state'] = 'disabled'
+        self.loadSecretKeyButton['state'] = 'enabled'
 
 
     def button_LoadSecretKey(self):
@@ -75,28 +81,31 @@ class DecryptionTab:
             # Deserialize the object from the file
             s = pickle.load(s_in)
         self.s = s['s']
-        self.messageButton = tk.Button(self.frame,text = "s",state='disabled',background='lightgreen')
-        ToolTip(self.messageButton,msg=str(s['s_T']))
-        self.messageButton.place(x = 330,y = 465,width=48, height=175)
-        self.messageButton['font'] = self.myFont
+        self.messageButtonS = tk.Button(self.frame,text = "s",state='disabled',background='lightgreen')
+        ToolTip(self.messageButtonS,msg=str(s['s_T']))
+        self.messageButtonS.place(x = 330,y = 465,width=48, height=175)
+        self.messageButtonS['font'] = self.myFont
+        self.loadSecretKeyButton['state'] = 'disabled'
+        self.decButton['state'] = 'enabled'
 
     def button_Decrypt(self):
         self.decrypted = decrypt(self.u,self.v,self.s)
-        self.messageButton = tk.Button(self.frame,text = "m",state='disabled',background='lightgrey')
-        ToolTip(self.messageButton,msg=self.decrypted['msg'])
-        self.messageButton.place(x = 437,y = 526,width=48, height=48)
-        self.messageButton['font'] = self.myFont
-        self.StepsDecodeDecryptedButton['state'] = 'enabled'
-
-    def button_reset(self):
-        print('a button was pressed')
-
-    def button_decryptSteps(self):
+        self.messageButtonM = tk.Button(self.frame,text = "m",state='disabled',background='lightgrey')
+        ToolTip(self.messageButtonM,msg=self.decrypted['msg'])
+        self.messageButtonM.place(x = 437,y = 526,width=48, height=48)
+        self.messageButtonM['font'] = self.myFont
+        self.decButton['state'] = 'disabled'
         with open("result.pickle", "rb") as res_in:
 
             # Deserialize the object from the file
             res = pickle.load(res_in)
         print(res)
+        if self.m_nLabel is not None:
+            self.m_nLabel.destroy()
+            self.m_nLabelCoeffs.destroy()
+            self.m_nLabelCoeffsDecode.destroy()
+            self.m_nLabelResultBit.destroy()
+            self.m_nLabelResultChar.destroy()
         self.m_nLabel = ttk.Label(self.frame,text = str(msgXbarToX(res['m_n'])))
         self.m_nLabel.place(x = 100, y =200)
         self.m_nLabelCoeffs = ttk.Label(self.frame,text = "Coefficients of the message: " + str(res['m_nSplit']))
@@ -107,3 +116,25 @@ class DecryptionTab:
         self.m_nLabelResultBit.place(x = 100, y =290)
         self.m_nLabelResultChar = ttk.Label(self.frame,text = "Bit representation to ASCII: " + str(res['result']['msg']))
         self.m_nLabelResultChar.place(x = 100, y =320)
+
+    def button_reset(self):
+        self.s = None
+        self.u = None
+        self.v = None
+
+        if self.messageButtonS is not None:
+            self.messageButtonS.destroy()
+        if self.messageButtonM is not None:
+            self.messageButtonM.destroy()
+            self.m_nLabel.destroy()
+            self.m_nLabelCoeffs.destroy()
+            self.m_nLabelCoeffsDecode.destroy()
+            self.m_nLabelResultBit.destroy()
+            self.m_nLabelResultChar.destroy()
+        if self.uButtonHover is not None:
+            self.uButtonHover.destroy()
+            self.vButtonHover.destroy()
+        self.loadCipherTextButton['state'] = 'enabled'
+        self.loadSecretKeyButton['state'] = 'disabled'
+        self.decButton['state'] = 'disabled'
+        

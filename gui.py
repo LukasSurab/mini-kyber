@@ -18,8 +18,6 @@ class MiniKyber:
         self.window.minsize(1200,720)
         self.window.maxsize(1200,720)
         self.notebook = ttk.Notebook(self.window,width=1200, height=720)
-        
-        #TODO obrazky interaktivne
 
         self.tab1 = KeyGenerationTab(self.notebook)
         self.tab2a = FrameUTab(self.notebook)
