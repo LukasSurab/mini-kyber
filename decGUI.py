@@ -2,9 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tktooltip import ToolTip
 from PIL import Image, ImageTk
-from pickleTRYING import *
-from keyGenGUI import *
-from encGUI import *
+from core import *
 import tkinter.font as font
 
 class DecryptionTab:
@@ -36,8 +34,8 @@ class DecryptionTab:
 
 
         self.loadCipherTextButton = ttk.Button(self.frame, text = 'Load Ciphertext',command = self.button_LoadCipherText)
-        self.loadSecretKeyButton = ttk.Button(self.frame, text = 'Load Secret Key', command = self.button_LoadSecretKey)
-        self.decButton = ttk.Button(self.frame, text = 'Decrypt',command = self.button_Decrypt)
+        self.loadSecretKeyButton = ttk.Button(self.frame, text = 'Load Secret Key', command = self.button_LoadSecretKey,state = 'disabled')
+        self.decButton = ttk.Button(self.frame, text = 'Decrypt',command = self.button_Decrypt,state = 'disabled')
 
         self.infoButton = tk.Button(self.frame,text = "?",state='disabled')
         ToolTip(self.infoButton,msg = "Na dešifrovanie správy Mini-Kyber vyžaduje ako vstup zašifrovanú správu ako dvojicu (u,v) a secret key sk == s.\n"
@@ -137,4 +135,3 @@ class DecryptionTab:
         self.loadCipherTextButton['state'] = 'enabled'
         self.loadSecretKeyButton['state'] = 'disabled'
         self.decButton['state'] = 'disabled'
-        
