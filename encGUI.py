@@ -2,9 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 from tktooltip import ToolTip
 from PIL import Image, ImageTk
-from pickleTRYING import *
-from keyGenGUI import *
+from core import *
 import tkinter.font as font
+from tkinter import messagebox
 
 class EncryptionTab:
     def __init__(self, notebook):
@@ -20,7 +20,8 @@ class EncryptionTab:
                 +"Nakoniec transponuje t a vypočíta v = t^T * r + e2 + m.\n"
                 + "Výstupom šifrovania je zašifrovaná správa ako dvojica (u,v).")
 
-        
+        self.encrypted = false
+
         self.image2 = Image.open("encryptionFlow.png")
         self.test1 = ImageTk.PhotoImage(self.image2)
         self.label2 = ttk.Label(self.frame,image=self.test1)
@@ -39,7 +40,7 @@ class EncryptionTab:
         self.messageLabel = ttk.Label(self.frame, text = 'Message to encrypt')
         self.messageToEncEntry = ttk.Entry(self.frame,state='disabled')
         self.encButton = ttk.Button(self.frame,text = "Encrypt",command = self.button_Encrypt,state= 'disabled')
-        self.resetButton = ttk.Button(self.frame,text = "reset",command = self.button_reset)
+        self.encButtonLabel = ttk.Label(self.frame, text = 'Not yet encrypted')
 
         self.seedLabelRandomizer.place(x = 180,y = 10)
         self.encSeedRandomizerEntry.place(x = 180, y = 32)
@@ -51,38 +52,16 @@ class EncryptionTab:
         self.messageLabel.place(x = 180,y = 250)
         self.messageToEncEntry.place(x = 180, y = 272)
         self.encButton.place(x = 10, y = 250)
+        self.encButtonLabel.place(x = 10, y = 280)
         self.infoButton.place(x =350, y = 0)
         self.label2.place(x=450,y = 0)
         self.label1.place(x = 10, y = 345)
-        self.resetButton.place(x = 1000,y= 600)
 
         self.r = None
 
         self.PKButton1 = None
         self.randomizerButton = None
         self.uButton = None
-   
-    def button_reset(self):
-        self.r = None
-
-        self.encGenerateRButton['state'] = 'enabled'
-        self.loadPKButton['state'] = 'disabled'
-        self.encButton['state'] = 'disabled'
-        self.encSeedRandomizerEntry['state'] = 'enabled'
-        self.seedEncEntry['state'] = 'disabled'
-        self.messageToEncEntry['state'] = 'disabled'
-        if self.PKButton1 is not None:
-            self.PKButton1.destroy()
-            self.tButton1.destroy()
-        if self.randomizerButton is not None:
-            self.randomizerButton.destroy()
-        if self.uButton is not None:
-            self.uButton.destroy()
-            self.vButton.destroy()
-            self.messageButton.destroy()
-            self.error1Button.destroy()
-            self.error2Button.destroy()
-
 
 
     def button_LoadPublicKey(self):
@@ -94,7 +73,7 @@ class EncryptionTab:
         print(f)
         self.PKButton1 = tk.Button(self.frame,text = "A",state='disabled',background='lightblue')
         self.PKButton1['font'] = self.myFont
-        self.PKButton1.place(x = 226,y = 390,width=117, height=117)
+        self.PKButton1.place(x = 224,y = 390,width=117, height=117)
         self.tButton1 = tk.Button(self.frame,text = "t",state='disabled',background='lightblue')
         self.tButton1.place(x = 343,y = 390,width=33, height=117)
         self.tButton1['font'] = self.myFont
@@ -137,31 +116,37 @@ class EncryptionTab:
         self.message = str(self.messageToEncEntry.get())
         print(seed)
         print(self.message)
-        self.u, self.v, self.e1, self.e2 = encrypt(self.a1,self.t1,poly_message(self.message),self.r,seed)
-        self.messageButton = tk.Button(self.frame,text = "m",state='disabled',background='lightgrey')
-        ToolTip(self.messageButton,msg=str(self.message))
-        self.messageButton.place(x = 343,y = 583,width=33, height=33)
-        self.messageButton['font'] = self.myFont
-        self.error1Button = tk.Button(self.frame,text = "e1",state='disabled',background='yellow')
-        ToolTip(self.error1Button,msg=str(self.e1))
-        self.error1Button.place(x = 223,y = 528,width=117, height=33)
-        self.error1Button['font'] = self.myFont
-        self.error2Button = tk.Button(self.frame,text = "e2",state='disabled',background='yellow')
-        ToolTip(self.error2Button,msg=str(self.e2))
-        self.error2Button.place(x = 343,y = 528,width=33, height=33)
-        self.error2Button['font'] = self.myFont
-        self.uButton = tk.Button(self.frame,text = "u",state='disabled',background='red')
-        ToolTip(self.uButton,msg=str(self.u))
-        self.uButton.place(x = 223,y = 635,width=117, height=33)
-        self.uButton['font'] = self.myFont
-        self.vButton = tk.Button(self.frame,text = "v",state='disabled',background='red')
-        ToolTip(self.vButton,msg=str(self.v))
-        self.vButton.place(x = 343,y = 635,width=33, height=33)
-        self.vButton['font'] = self.myFont
+        if self.message == "":
+            messagebox.showerror('Python Error', 'Error: Missing message m!')
+        else:
+            self.u, self.v, self.e1, self.e2 = encrypt(self.a1,self.t1,poly_message(self.message),self.r,seed)
+            self.messageButton = tk.Button(self.frame,text = "m",state='disabled',background='lightgrey')
+            ToolTip(self.messageButton,msg=str(self.message))
+            self.messageButton.place(x = 343,y = 584,width=33, height=33)
+            self.messageButton['font'] = self.myFont
+            self.error1Button = tk.Button(self.frame,text = "e1",state='disabled',background='yellow')
+            ToolTip(self.error1Button,msg=str(self.e1))
+            self.error1Button.place(x = 224,y = 529,width=117, height=33)
+            self.error1Button['font'] = self.myFont
+            self.error2Button = tk.Button(self.frame,text = "e2",state='disabled',background='yellow')
+            ToolTip(self.error2Button,msg=str(self.e2))
+            self.error2Button.place(x = 343,y = 529,width=33, height=33)
+            self.error2Button['font'] = self.myFont
+            self.uButton = tk.Button(self.frame,text = "u",state='disabled',background='red')
+            ToolTip(self.uButton,msg=str(self.u))
+            self.uButton.place(x = 224,y = 636,width=117, height=33)
+            self.uButton['font'] = self.myFont
+            self.vButton = tk.Button(self.frame,text = "v",state='disabled',background='red')
+            ToolTip(self.vButton,msg=str(self.v))
+            self.vButton.place(x = 343,y = 636,width=33, height=33)
+            self.vButton['font'] = self.myFont
 
-        #if seed != None:
-        self.seedEncEntry.configure(state = 'disabled')
-        self.encButton['state'] = 'disabled'
-        if(str(self.messageToEncEntry.get()) != ""):
+            self.encButtonLabel['text'] = "Encrypted: " + str(self.message)
+
+            #if seed != None:
+            self.seedEncEntry.configure(state = 'disabled')
+            self.encButton['state'] = 'disabled'
+            #if(str(self.messageToEncEntry.get()) != ""):
             self.messageToEncEntry.configure(state = 'disabled')
-        print('a button was pressed')
+            print('a button was pressed')
+            self.encrypted = true
