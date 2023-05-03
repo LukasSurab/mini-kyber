@@ -121,7 +121,7 @@ class EncryptionTab:
         else:
             self.u, self.v, self.e1, self.e2 = encrypt(self.a1,self.t1,poly_message(self.message),self.r,seed)
             self.messageButton = tk.Button(self.frame,text = "m",state='disabled',background='lightgrey')
-            ToolTip(self.messageButton,msg=str(self.message))
+            ToolTip(self.messageButton,msg=str(poly_message(self.message)))
             self.messageButton.place(x = 343,y = 584,width=33, height=33)
             self.messageButton['font'] = self.myFont
             self.error1Button = tk.Button(self.frame,text = "e1",state='disabled',background='yellow')
