@@ -2,9 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tktooltip import ToolTip
 from PIL import Image, ImageTk
-from pickleTRYING import *
-from keyGenGUI import *
-from encGUI import *
+import pickle
 import tkinter.font as font
 
 class FrameUTab:
