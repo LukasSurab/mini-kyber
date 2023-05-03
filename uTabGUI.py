@@ -80,7 +80,7 @@ class FrameUTab:
         self.loadButton['state'] = 'disabled'
 
     def load_button_skU(self):
-        with open("keyGenSecretDataTransposed.pickle", "rb") as s_in:
+        with open("keyGenSecretData.pickle", "rb") as s_in:
 
             # Deserialize the object from the file
             s = pickle.load(s_in)
