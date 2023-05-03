@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tktooltip import ToolTip
 from PIL import Image, ImageTk
-from pickleTRYING import *
+from core import *
 import tkinter.font as font
 from tkinter import messagebox
 
@@ -19,6 +19,7 @@ class KeyGenerationTab:
         self.test = ImageTk.PhotoImage(self.image1)
         self.label1 = ttk.Label(self.frame,image=self.test)
 
+        self.generatedKeys = false
         
         self.image2 = Image.open("keygenFix.png")
         self.test1 = ImageTk.PhotoImage(self.image2)
@@ -34,7 +35,7 @@ class KeyGenerationTab:
         self.PKButton = None
         self.myFont = font.Font(size=20)
 
-        self.resetButton = ttk.Button(self.frame,text = "reset",command = self.button_reset)
+        #self.resetButton = ttk.Button(self.frame,text = "reset",command = self.button_reset)
 
         self.seedLabelS = ttk.Label(self.frame, text = 'seed for Secret Key')
         self.entrySSeed = ttk.Entry(self.frame)
@@ -74,7 +75,7 @@ class KeyGenerationTab:
         self.infoButton.place(x = 350, y = 0)
         self.label2.place(x=730,y = 10)
 
-        self.resetButton.place(x = 1000,y= 600)
+        #self.resetButton.place(x = 1000,y= 600)
 
     def button_generateSecret(self):
         if self.entrySSeed.get() != '':
@@ -123,6 +124,7 @@ class KeyGenerationTab:
         else:
             messagebox.showerror('Python Error', 'Error: Missing secret s/error e!')
         print('a button was pressed')
+        self.generatedKeys = true
 
     def button_generateError(self,seed = None):
         if self.enrtryErrorSeed.get() != '':
@@ -142,33 +144,3 @@ class KeyGenerationTab:
         self.enrtryErrorSeed['state'] = 'disabled'
         self.PKGenButton['state'] = "enabled"
         self.entryPublicKeySeed['state'] = "enabled" 
-
-    def button_reset(self):
-        self.s = None
-        self.e = None
-        self.a = None
-        self.t = None
-        
-        self.errorELabel['text'] = "error e is not generated"
-        self.secretSLabel['text'] = "secret s is not generated"
-        self.PKALabel['text'] = "publicKey A is not generated"
-        self.PKtLabel['text'] = "publicKey t is not generated"
-        self.generateSButton['state'] = 'enabled'
-        self.entrySSeed['state'] = 'enabled'
-        self.PKgeneateEButton['state'] = 'disabled'
-        self.enrtryErrorSeed['state'] = 'disabled'
-        self.PKGenButton['state'] = 'disabled'
-        self.entryPublicKeySeed['state'] = "disabled"
-
-        if self.sButton is not None:
-            self.sButton.destroy()
-            self.sButton = None
-        if self.tButton is not None:
-            self.tButton.destroy()
-            self.tButton = None
-        if self.errorButton is not None:
-            self.errorButton.destroy()
-            self.errorButton = None
-        if self.PKButton is not None:
-            self.PKButton.destroy()
-            self.PKButton = None
