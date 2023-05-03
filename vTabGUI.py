@@ -1,10 +1,8 @@
 import tkinter as tk
+import pickle
 from tkinter import ttk
 from tktooltip import ToolTip
 from PIL import Image, ImageTk
-from pickleTRYING import *
-from keyGenGUI import *
-from encGUI import *
 import tkinter.font as font
 
 class FrameVTab:
