@@ -62,11 +62,11 @@ class DecryptionTab:
         self.u = uv['u']
         self.v = uv['v']
         self.uButtonHover = tk.Button(self.frame,text = "u",state='disabled',background='red')
-        ToolTip(self.uButtonHover,msg=str(self.u))
+        ToolTip(self.uButtonHover,msg=str(smallRandomXbarToX(self.u)))
         self.uButtonHover.place(x = 148,y = 465,width=175, height=48)
         self.uButtonHover['font'] = self.myFont
         self.vButtonHover = tk.Button(self.frame,text = "v",state='disabled',background='red')
-        ToolTip(self.vButtonHover,msg=str(self.v))
+        ToolTip(self.vButtonHover,msg=str(msgXbarToX(self.v)))
         self.vButtonHover.place(x = 64,y = 526,width=48, height=48)
         self.vButtonHover['font'] = self.myFont
         self.loadCipherTextButton['state'] = 'disabled'
@@ -80,7 +80,7 @@ class DecryptionTab:
             s = pickle.load(s_in)
         self.s = s['s']
         self.messageButtonS = tk.Button(self.frame,text = "s",state='disabled',background='lightgreen')
-        ToolTip(self.messageButtonS,msg=str(s['s_T']))
+        ToolTip(self.messageButtonS,msg=str(smallRandomXbarToX(self.s)))
         self.messageButtonS.place(x = 330,y = 465,width=48, height=175)
         self.messageButtonS['font'] = self.myFont
         self.loadSecretKeyButton['state'] = 'disabled'
@@ -88,16 +88,16 @@ class DecryptionTab:
 
     def button_Decrypt(self):
         self.decrypted = decrypt(self.u,self.v,self.s)
-        self.messageButtonM = tk.Button(self.frame,text = "m",state='disabled',background='lightgrey')
-        ToolTip(self.messageButtonM,msg=self.decrypted['msg'])
-        self.messageButtonM.place(x = 437,y = 526,width=48, height=48)
-        self.messageButtonM['font'] = self.myFont
-        self.decButton['state'] = 'disabled'
+        self.messageButtonM = tk.Button(self.frame,text = "mE",state='disabled',background='lightgrey')
         with open("result.pickle", "rb") as res_in:
 
             # Deserialize the object from the file
             res = pickle.load(res_in)
         print(res)
+        ToolTip(self.messageButtonM,msg=msgXbarToX(res['m_n']))
+        self.messageButtonM.place(x = 437,y = 526,width=48, height=48)
+        self.messageButtonM['font'] = self.myFont
+        self.decButton['state'] = 'disabled'
         if self.m_nLabel is not None:
             self.m_nLabel.destroy()
             self.m_nLabelCoeffs.destroy()
@@ -135,3 +135,4 @@ class DecryptionTab:
         self.loadCipherTextButton['state'] = 'enabled'
         self.loadSecretKeyButton['state'] = 'disabled'
         self.decButton['state'] = 'disabled'
+        
