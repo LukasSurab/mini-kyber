@@ -5,7 +5,7 @@ from PIL import Image, ImageTk
 from core import *
 import tkinter.font as font
 from tkinter import messagebox
-
+from helperFunctions import *
 
 class KeyGenerationTab:
     def __init__(self, notebook):
@@ -85,7 +85,7 @@ class KeyGenerationTab:
         print(seed)
         self.s = generate_secret_key(seed)
         self.sButton = tk.Button(self.frame,text = "s",state='disabled',background='lightgreen')
-        ToolTip(self.sButton,msg=str(self.s))
+        ToolTip(self.sButton,msg=str(smallRandomXbarToX(self.s)))
         self.secretSLabel['text'] = "secret s was generated"
         self.sButton.place(x = 533,y = 246,width=30, height=106)
         self.sButton['font'] = self.myFont
@@ -114,8 +114,8 @@ class KeyGenerationTab:
             print(aX)
             print(aX[0])
             print(aX[1])
-            ToolTip(self.PKButton, msg = "matrix A: " + str(aX[0]) + "\n" + str(aX[1]))
-            ToolTip(self.tButton, msg = "t: " + str(self.t))
+            ToolTip(self.PKButton, msg =str(aX[0]) + "\n" + str(aX[1]))
+            ToolTip(self.tButton, msg =str(smallRandomXbarToX(self.t)))
             self.PKALabel['text'] = "matrix A was generated"
             self.PKtLabel['text'] = "public key part t was generated"
             #if seed != None:
@@ -135,7 +135,7 @@ class KeyGenerationTab:
         self.e = generate_keyGen_error(seed)
         self.errorButton = tk.Button(self.frame,text = "e",state='disabled',background='yellow')
         self.errorELabel['text'] = "error e was generated"
-        ToolTip(self.errorButton,msg=str(self.e))
+        ToolTip(self.errorButton,msg=str(smallRandomXbarToX(self.e)))
         self.errorButton.place(x = 585,y = 246,width=30, height=106)
         self.errorButton['font'] = self.myFont
         #if seed != None:
