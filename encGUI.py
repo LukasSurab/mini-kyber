@@ -83,8 +83,8 @@ class EncryptionTab:
         print(aX1)
         print(aX1[0])
         print(aX1[1])
-        ToolTip(self.PKButton1, msg = "matrix A: " + str(aX1[0]) + "\n" + str(aX1[1]))
-        ToolTip(self.tButton1, msg = "t: " + str(self.t1))
+        ToolTip(self.PKButton1, msg =str(aX1[0]) + "\n" + str(aX1[1]))
+        ToolTip(self.tButton1, msg =str(smallRandomXbarToX(self.t1)))
         self.loadPKButton['state'] = 'disabled'
         self.encButton['state'] = 'enabled'
         self.seedEncEntry['state'] = 'enabled'
@@ -99,7 +99,7 @@ class EncryptionTab:
         self.r = generate_small_randoms(seed)
         self.randomizerButton = tk.Button(self.frame,text = "r",state='disabled',background='lightgreen')
         self.seedLabelRandomizerResult['text'] = "Randomizer r was generated"
-        ToolTip(self.randomizerButton,msg=str(self.r))
+        ToolTip(self.randomizerButton,msg=str(smallRandomXbarToX(self.r)))
         self.randomizerButton.place(x = 90,y = 390,width=117, height=33)
         self.randomizerButton['font'] = self.myFont
         #if seed != None:
@@ -121,23 +121,23 @@ class EncryptionTab:
         else:
             self.u, self.v, self.e1, self.e2 = encrypt(self.a1,self.t1,poly_message(self.message),self.r,seed)
             self.messageButton = tk.Button(self.frame,text = "m",state='disabled',background='lightgrey')
-            ToolTip(self.messageButton,msg=str(poly_message(self.message)))
+            ToolTip(self.messageButton,msg=str(msgXbarToX(poly_message(self.message))))
             self.messageButton.place(x = 343,y = 584,width=33, height=33)
             self.messageButton['font'] = self.myFont
             self.error1Button = tk.Button(self.frame,text = "e1",state='disabled',background='yellow')
-            ToolTip(self.error1Button,msg=str(self.e1))
+            ToolTip(self.error1Button,msg=str(smallRandomXbarToX(self.e1)))
             self.error1Button.place(x = 224,y = 529,width=117, height=33)
             self.error1Button['font'] = self.myFont
             self.error2Button = tk.Button(self.frame,text = "e2",state='disabled',background='yellow')
-            ToolTip(self.error2Button,msg=str(self.e2))
+            ToolTip(self.error2Button,msg=str(msgXbarToX(self.e2)))
             self.error2Button.place(x = 343,y = 529,width=33, height=33)
             self.error2Button['font'] = self.myFont
             self.uButton = tk.Button(self.frame,text = "u",state='disabled',background='red')
-            ToolTip(self.uButton,msg=str(self.u))
+            ToolTip(self.uButton,msg=str(smallRandomXbarToX(self.u)))
             self.uButton.place(x = 224,y = 636,width=117, height=33)
             self.uButton['font'] = self.myFont
             self.vButton = tk.Button(self.frame,text = "v",state='disabled',background='red')
-            ToolTip(self.vButton,msg=str(self.v))
+            ToolTip(self.vButton,msg=str(msgXbarToX(self.v)))
             self.vButton.place(x = 343,y = 636,width=33, height=33)
             self.vButton['font'] = self.myFont
 
