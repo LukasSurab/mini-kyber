@@ -4,6 +4,7 @@ from tktooltip import ToolTip
 from PIL import Image, ImageTk
 import pickle
 import tkinter.font as font
+from helperFunctions import *
 
 class FrameUTab:
     def __init__(self, notebook):
@@ -42,39 +43,35 @@ class FrameUTab:
         self.mU = u['m']
         self.vU = u['v']
         self.AButtonHover = tk.Button(self.frame,text = "A",state='disabled',background='lightblue')
-        ToolTip(self.AButtonHover,msg=str(self.AU))
+        ToolTip(self.AButtonHover,msg=str(matrixXbartoX(self.AU)))
         self.AButtonHover.place(x = 526,y = 132,width=173, height=173)
         self.AButtonHover['font'] = self.myFont
         self.AButtonHover2 = tk.Button(self.frame,text = "A",state='disabled',background='lightblue')
-        ToolTip(self.AButtonHover2,msg=str(self.AU))
+        ToolTip(self.AButtonHover2,msg=str(matrixXbartoX(self.AU)))
         self.AButtonHover2.place(x = 526,y = 345,width=173, height=173)
         self.AButtonHover2['font'] = self.myFont
         self.rButtonHover = tk.Button(self.frame,text = "r",state='disabled',background='lightgreen')
-        ToolTip(self.rButtonHover,msg=str(self.rU))
+        ToolTip(self.rButtonHover,msg=str(smallRandomXbarToX(self.rU)))
         self.rButtonHover.place(x = 340,y = 132,width=173, height=48)
         self.rButtonHover['font'] = self.myFont
         self.rButtonHover2 = tk.Button(self.frame,text = "r",state='disabled',background='lightgreen')
-        ToolTip(self.rButtonHover2,msg=str(self.rU))
+        ToolTip(self.rButtonHover2,msg=str(smallRandomXbarToX(self.rU)))
         self.rButtonHover2.place(x = 340,y = 345,width=173, height=48)
         self.rButtonHover2['font'] = self.myFont
-        self.rButtonHover3 = tk.Button(self.frame,text = "r",state='disabled',background='lightgreen')
-        ToolTip(self.rButtonHover3,msg=str(self.rU))
-        self.rButtonHover3.place(x = 340,y = 132,width=173, height=48)
-        self.rButtonHover3['font'] = self.myFont
         self.uButtonHover = tk.Button(self.frame,text = "u",state='disabled',background='red')
-        ToolTip(self.uButtonHover,msg=str(self.u))
+        ToolTip(self.uButtonHover,msg=str(smallRandomXbarToX(self.u)))
         self.uButtonHover.place(x = 40,y = 132,width=173, height=48)
         self.uButtonHover['font'] = self.myFont
         self.e1ButtonHover = tk.Button(self.frame,text = "e1",state='disabled',background='yellow')
-        ToolTip(self.e1ButtonHover,msg=str(self.e1U))
+        ToolTip(self.e1ButtonHover,msg=str(smallRandomXbarToX(self.e1U)))
         self.e1ButtonHover.place(x = 740,y = 132,width=173, height=48)
         self.e1ButtonHover['font'] = self.myFont
         self.vButtonHover = tk.Button(self.frame,text = "v",state='disabled',background='red')
-        ToolTip(self.vButtonHover,msg=str(self.vU))
+        ToolTip(self.vButtonHover,msg=str(msgXbarToX(self.vU)))
         self.vButtonHover.place(x = 897,y = 407,width=48, height=48)
         self.vButtonHover['font'] = self.myFont
         self.mButtonHover = tk.Button(self.frame,text = "m",state='disabled',background='lightgrey')
-        ToolTip(self.mButtonHover,msg=str(self.mU))
+        ToolTip(self.mButtonHover,msg=str(msgXbarToX(self.mU)))
         self.mButtonHover.place(x = 974,y = 407,width=48, height=48)
         self.mButtonHover['font'] = self.myFont
         self.loadButton['state'] = 'disabled'
@@ -86,15 +83,15 @@ class FrameUTab:
             s = pickle.load(s_in)
         self.s = s['s']
         self.sButton = tk.Button(self.frame,text = "s",state='disabled',background='lightgreen')
-        ToolTip(self.sButton,msg=str(self.s))
+        ToolTip(self.sButton,msg=str(smallRandomXbarToX(self.s)))
         self.sButton.place(x = 708,y = 345,width=48, height=173)
         self.sButton['font'] = self.myFont
         self.sButton1 = tk.Button(self.frame,text = "s",state='disabled',background='lightgreen')
-        ToolTip(self.sButton1,msg=str(self.s))
+        ToolTip(self.sButton1,msg=str(smallRandomXbarToX(self.s)))
         self.sButton1.place(x = 937,y = 132,width=48, height=173)
         self.sButton1['font'] = self.myFont
         self.sButton2 = tk.Button(self.frame,text = "s",state='disabled',background='lightgreen')
-        ToolTip(self.sButton2,msg=str(self.s))
+        ToolTip(self.sButton2,msg=str(smallRandomXbarToX(self.s)))
         self.sButton2.place(x = 222,y = 132,width=48, height=173)
         self.sButton2['font'] = self.myFont
         self.loadButtonSK['state'] = 'disabled'
@@ -114,5 +111,4 @@ class FrameUTab:
             self.vButtonHover.destroy()
             self.rButtonHover.destroy()
             self.rButtonHover2.destroy()
-            self.rButtonHover3.destroy()
             self.mButtonHover.destroy()
