@@ -8,14 +8,19 @@ def decode(coeffsMsg):
         else:
             coeffic = 0
         coefficients.append(coeffic)
+    print("decoded:")    
+    print(coefficients)    
     return coefficients
 
 def decompress(arr, q):
 
     decompressed_arr = [q * x for x in arr]
+    print("decompressed:") 
     return decompressed_arr
 
 def compress(arr, q):
 
     compressd_arr = [x / q for x in arr]
+    print("compressed:")
+    print(compressd_arr)
     return compressd_arr
