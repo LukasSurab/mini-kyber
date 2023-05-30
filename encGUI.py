@@ -15,9 +15,9 @@ class EncryptionTab:
         ToolTip(self.infoButton,msg = "Na zašifrovanie správy Mini-Kyber vyžaduje ako vstup public key pk, randimzer vector r a samotnú správu m, ktorú chceme zašifrovať.\n"
                 + "Voliteľným parametrom je seed, podľa ktorý používa PRF.\n"
                 + "Samotná funkcia encrypt vygeneruje dva náhodné šumy e_1 (vektor), e_2 (polynóm).\n"
-                + "Následne transponuje maticu A a vypočíta u = A^T * r + e_1.\n"
+                + "Následne transponuje maticu A a vypočíta u = A^T * r + e_1. u je teda vektor polynómov\n"
                 + "Ďalej zmení správu na jej bitovú reprezentáciu a \"pozdvihne\" koeficienty.\n"
-                +"Nakoniec transponuje t a vypočíta v = t^T * r + e2 + m.\n"
+                +"Nakoniec transponuje t a vypočíta v = t^T * r + e2 + m. v je teda polynóm.\n"
                 + "Výstupom šifrovania je zašifrovaná správa ako dvojica (u,v).")
 
         self.encrypted = false
@@ -65,7 +65,6 @@ class EncryptionTab:
 
 
     def button_LoadPublicKey(self):
-        print('a button was pressed')
         with open("keyGenData.pickle", "rb") as f_in:
 
             # Deserialize the object from the file
@@ -95,6 +94,7 @@ class EncryptionTab:
             seed = int (self.encSeedRandomizerEntry.get())
         else:
             seed = None
+        print("seed:")
         print(seed)
         self.r = generate_small_randoms(seed)
         self.randomizerButton = tk.Button(self.frame,text = "r",state='disabled',background='lightgreen')
@@ -106,7 +106,6 @@ class EncryptionTab:
         self.encSeedRandomizerEntry.configure(state = 'disabled')
         self.encGenerateRButton['state'] = 'disabled'
         self.loadPKButton['state'] = 'enabled'
-        print('a button was pressed')
 
     def button_Encrypt(self,seed = None):
         if self.seedEncEntry.get() != '':
@@ -114,8 +113,9 @@ class EncryptionTab:
         else:
             seed = None
         self.message = str(self.messageToEncEntry.get())
+        print("seed:")
         print(seed)
-        print(self.message)
+        print("message")
         if self.message == "":
             messagebox.showerror('Python Error', 'Error: Missing message m!')
         else:
@@ -148,5 +148,4 @@ class EncryptionTab:
             self.encButton['state'] = 'disabled'
             #if(str(self.messageToEncEntry.get()) != ""):
             self.messageToEncEntry.configure(state = 'disabled')
-            print('a button was pressed')
             self.encrypted = true
