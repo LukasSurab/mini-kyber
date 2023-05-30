@@ -36,6 +36,7 @@ class FrameUTab:
 
             # Deserialize the object from the file
             u = pickle.load(u_in)
+        print(u)
         self.u = u['u']
         self.e1U = u['e1']
         self.AU = u['A']
@@ -81,6 +82,7 @@ class FrameUTab:
 
             # Deserialize the object from the file
             s = pickle.load(s_in)
+        print(s)
         self.s = s['s']
         self.sButton = tk.Button(self.frame,text = "s",state='disabled',background='lightgreen')
         ToolTip(self.sButton,msg=str(smallRandomXbarToX(self.s)))
