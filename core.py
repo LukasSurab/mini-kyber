@@ -26,8 +26,6 @@ def generate_public_key(s,e,startSeed = None,output=dict()):
     output['A'] = A
     output['t'] = t
     output['e'] = e
-    outputA = matrixXbartoX(A) 
-    print(type(outputA[0][0]))
     pickleString = pickle.dumps(output)
     with open("keyGenData.pickle","wb") as f:
         f.write(pickleString)
