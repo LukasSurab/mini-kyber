@@ -41,8 +41,6 @@ class KeyGenerationTab:
         self.entrySSeed = ttk.Entry(self.frame)
         self.generateSButton = ttk.Button(self.frame,text = "Generate secret s", command = self.button_generateSecret)
         self.secretSLabel = ttk.Label(self.frame,text = "Secret s is not generated")
-        ToolTip(self.generateSButton, msg = 'vygeneruje Secret Key s')
-
 
         self.seedLabelError = ttk.Label(self.frame, text = 'seed for error e')
         self.enrtryErrorSeed = ttk.Entry(self.frame,state = 'disabled')
@@ -82,6 +80,7 @@ class KeyGenerationTab:
             seed = int (self.entrySSeed.get())
         else:
             seed = None
+        print("seed:")
         print(seed)
         self.s = generate_secret_key(seed)
         self.sButton = tk.Button(self.frame,text = "s",state='disabled',background='lightgreen')
@@ -101,6 +100,7 @@ class KeyGenerationTab:
             seed = int (self.entryPublicKeySeed.get())
         else:
             seed = None
+        print("seed:")
         print(seed)
         if self.s is not None and self.e is not None:
             self.PKButton = tk.Button(self.frame,text = "A",state='disabled',background='lightblue')
@@ -123,7 +123,6 @@ class KeyGenerationTab:
             self.entryPublicKeySeed.configure(state = 'disabled')
         else:
             messagebox.showerror('Python Error', 'Error: Missing secret s/error e!')
-        print('a button was pressed')
         self.generatedKeys = true
 
     def button_generateError(self,seed = None):
@@ -131,6 +130,7 @@ class KeyGenerationTab:
             seed = int (self.enrtryErrorSeed.get())
         else:
             seed = None
+        print("seed:")
         print(seed)
         self.e = generate_keyGen_error(seed)
         self.errorButton = tk.Button(self.frame,text = "e",state='disabled',background='yellow')
