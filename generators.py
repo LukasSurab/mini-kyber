@@ -23,7 +23,7 @@ def generate_random_matrix22(startSeed = None):
 
     A = matrix([[Rmodf(sum(coeffs1[i]*x**i for i in range(ExpMod))),Rmodf(sum(coeffs2[i]*x**i for i in range(ExpMod)))], 
                 [Rmodf(sum(coeffs3[i]*x**i for i in range(ExpMod))),Rmodf(sum(coeffs4[i]*x**i for i in range(ExpMod)))]])
-    print(A)
+    print("A:") 
     return A
 
 
@@ -44,7 +44,8 @@ def generate_small_randoms(startSeed=None,cbd = None):
         coeffs2 = PRF_small(startSeed+1,cbd)
     
     s = matrix([[Rmodf(sum(coeffs1[i]*x**i for i in range(ExpMod)))], [Rmodf(sum(coeffs2[i]*x**i for i in range(ExpMod)))]])
-    
+    print("generated value:") 
+    print(s)
     return s
 
 
@@ -61,7 +62,8 @@ def generate_small_random_poly(startSeed=None,cbd = None):
     coeffs = PRF_small(startSeed,cbd)
     
     s = matrix([Rmodf(sum(coeffs[i]*x**i for i in range(ExpMod)))])
-    
+    print("s:") 
+    print(s)
     return s
 
 def generate_keyGen_error(startSeed=None):
