@@ -39,7 +39,7 @@ class DecryptionTab:
 
         self.infoButton = tk.Button(self.frame,text = "?",state='disabled')
         ToolTip(self.infoButton,msg = "Na dešifrovanie správy Mini-Kyber vyžaduje ako vstup zašifrovanú správu ako dvojicu (u,v) a secret key sk == s.\n"
-                + "Ako prvá časť dešifrovania sa vypočíta zašumený výsledok m_n = v - s^T * u = e^T * r + e_2 + m + s^T * e_1\n"
+                + "Ako prvá časť dešifrovania sa vypočíta zašumený výsledok m_n = v - s^T * u = e^T * r + e_2 + m + s^T * e_1.\n"
                 + "Na tento výsledok sa následne použije dekódovacia funckia a teda dostaneme m = decode(m_n).\n"
                 + "Dekódovacia funckia funguje tak, že všetky bity porovná či sú bližšie ku q/2 alebo ku N, resp 0.\n"
                 +"Bity následne zaokrúhli na hodnoty buď q/2 ak sú bližšie ku q/2, alebo na 0 v ostatných prípadoch.\n"
@@ -59,6 +59,7 @@ class DecryptionTab:
 
             # Deserialize the object from the file
             uv = pickle.load(uv_in)
+        print(uv)
         self.u = uv['u']
         self.v = uv['v']
         self.uButtonHover = tk.Button(self.frame,text = "u",state='disabled',background='red')
@@ -78,6 +79,7 @@ class DecryptionTab:
 
             # Deserialize the object from the file
             s = pickle.load(s_in)
+        print(s)
         self.s = s['s']
         self.messageButtonS = tk.Button(self.frame,text = "s",state='disabled',background='lightgreen')
         ToolTip(self.messageButtonS,msg=str(smallRandomXbarToX(self.s)))
