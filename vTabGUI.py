@@ -44,6 +44,7 @@ class FrameVTab:
 
             # Deserialize the object from the file
             v = pickle.load(v_in)
+        print(v)
         self.v = v['v']
         self.e2V = v['e2']
         self.tV = v['t']
@@ -98,6 +99,7 @@ class FrameVTab:
 
             # Deserialize the object from the file
             t = pickle.load(t_in)
+        print(t)
         self.A = t['A']
         self.eV = t['e']
         self.AButtonHover = tk.Button(self.frame,text = "A",state='disabled',background='lightblue')
@@ -120,6 +122,7 @@ class FrameVTab:
 
             # Deserialize the object from the file
             s = pickle.load(s_in)
+        print(s)
         self.s = s['s']
         self.sButton = tk.Button(self.frame,text = "s",state='disabled',background='lightgreen')
         ToolTip(self.sButton,msg=str(smallRandomXbarToX(self.s)))
