@@ -20,6 +20,8 @@ def PRF_small(startSeed = None,cbd = None):
         bigRand = int.from_bytes(hash, 'big')
         rand = min + bigRand % (max - min + 1)
         coeffs1[i] = F(rand)
+    print("PRF small:")
+    print(coeffs1)
     return coeffs1
 
 
@@ -36,4 +38,6 @@ def PRF(startSeed = None):
         bigRand = int.from_bytes(hash, 'big')
         rand = min + bigRand % (max - min + 1)
         coeffs1[i] = F(rand)
+    print("PRF:")
+    print(coeffs1)
     return coeffs1
